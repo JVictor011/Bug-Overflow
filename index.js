@@ -1,22 +1,23 @@
 const express = require("express");
 const app = express();
 const connection = require("./database/database");
+const Pergunta = require("./database/pergunta");
 
 //Database
 connection
-    .authenticate()
-    .then(() => {
-      console.log("Conectado com sucesso!");
-    })
-    .catch((msgERROR) => {
-      console.log(msgERROR);
-    });
+  .authenticate()
+  .then(() => {
+    console.log("Conectado com sucesso!");
+  })
+  .catch((msgERROR) => {
+    console.log(msgERROR);
+  });
 
 const PORT = process.env.PORT || 5000;
 
 // EJS como view engine
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.set("view engine", "ejs");
+app.use(express.static("public"));
 
 // Configurar o uso do bodyParser
 app.use(express.urlencoded({ extended: false }));
