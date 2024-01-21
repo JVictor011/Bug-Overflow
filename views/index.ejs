@@ -1,12 +1,24 @@
 <%- include('partials/header.ejs') %>
-  <body>
-    <%- include('partials/navbar.ejs') %>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <h1>Bug Overflow</h1>
-        </div>
+<body>
+  <%- include('partials/navbar.ejs') %>
+  <div class="container">
+    <% perguntas.forEach(pergunta => { %>
+    <div class="card" id="form-pergunta">
+      <div class="card-header" id="card-header-pergunta">
+        <h4><%= pergunta.titulo %></h4>
+      </div>
+      <div class="card-body"><%- pergunta.descricaoMarkdown %></div>
+      <div class="card-footer">
+        <% if(pergunta.status == true){ %>
+        <p>Pergunta aberta</p>
+        <% }else{ %>
+        <p>Pergunta fechada</p>
+        <% } %>
+        <p>Criado em <%= pergunta.createdAt %></p>
       </div>
     </div>
-  </body>
-<%- include('partials/footer.ejs') %>
+    <br />
+    <% }) %>
+  </div>
+  <%- include('partials/footer.ejs') %>
+</body>

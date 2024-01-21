@@ -10,8 +10,16 @@ const Pergunta = connection.define("perguntas", {
     type: Sequelize.TEXT,
     allowNull: false,
   },
+  username: {
+    type: Sequelize.STRING,
+  },
+  status:{
+    type: Sequelize.BOOLEAN,
+  }
 });
 
 Pergunta.sync({ force: false }).then(() => {
   console.log("Tabela criada!");
 });
+
+module.exports = Pergunta;

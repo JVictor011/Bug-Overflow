@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const connection = require("./database/database");
 const Pergunta = require("./database/pergunta");
+const markdownIt = require('markdown-it');
+const md = new markdownIt();
 
 //Database
 connection
@@ -24,7 +26,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.render("index");
+  Pergunta.findAll({ raw: true }).then((perguntas) => {
+    // Processar e exibir as perguntas em Markdown
+    res.render("index", {
+      perguntas: perguntas.map(pergunta => {
+        // Use o markdown-it para processar o conteúdo Markdown da descrição
+        return {
+          ...pergunta,
+          descricaoMarkdown: md.render(pergunta.descricao),
+        };
+      }),
+    });
+  });
 });
 
 app.get("/perguntar", (req, res) => {
@@ -32,9 +45,14 @@ app.get("/perguntar", (req, res) => {
 });
 
 app.post("/salvarpergunta", (req, res) => {
-  var titulo = req.body.titulo;
-  var descricao = req.body.descricao;
-  res.send("Titulo: " + titulo + " Descrição:" + descricao);
+  var { titulo, descricao } = req.body;
+  Pergunta.create({
+    titulo: titulo,
+    descricao: descricao,
+    status: true,
+  }).then(() => {
+    res.redirect("/");
+  });
 });
 
 // Iniciar o servidor
