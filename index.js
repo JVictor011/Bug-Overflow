@@ -1,5 +1,17 @@
 const express = require("express");
 const app = express();
+const connection = require("./database/database");
+
+//Database
+connection
+    .authenticate()
+    .then(() => {
+      console.log("Conectado com sucesso!");
+    })
+    .catch((msgERROR) => {
+      console.log(msgERROR);
+    });
+
 const PORT = process.env.PORT || 5000;
 
 // EJS como view engine
