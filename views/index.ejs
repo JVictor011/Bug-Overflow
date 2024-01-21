@@ -2,6 +2,9 @@
 <body>
   <%- include('partials/navbar.ejs') %>
   <div class="container">
+    <hr>
+    <h1>Perguntas: <a href="/perguntar" class="btn btn-primary">Perguntar</a></h1>
+    <hr>
     <% perguntas.forEach(pergunta => { %>
     <div class="card" id="form-pergunta">
       <div class="card-header" id="card-header-pergunta">
@@ -15,6 +18,7 @@
         <p>Pergunta fechada</p>
         <% } %>
         <p>Criado em <%= pergunta.createdAt %></p>
+        <button class="btn btn-primary">Responder</button>
       </div>
     </div>
     <br />
