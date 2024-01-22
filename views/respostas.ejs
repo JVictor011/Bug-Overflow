@@ -14,10 +14,34 @@
         <p>Pergunta fechada</p>
         <% } %>
         <p>Criado em <%= pergunta.createdAt %></p>
-        <button class="btn btn-primary">Responder</button>
+        <hr />
       </div>
     </div>
     <br />
+    <div class="card" id="form-criar-resposta">
+      <div class="card-header" id="card-header-pergunta">
+        <h6>Resposta</h6>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="/salvarResposta">
+          <textarea
+            placeholder="Digite sua resposta"
+            class="form-control"
+            name="corpoResposta"
+          ></textarea>
+          <input type="hidden" value="<%= pergunta.id %>" name="idResposta" />
+          <br />
+          <button class="btn btn-primary">Responder</button>
+        </form>
+      </div>
+    </div>
+    <br />
+    <% respostas.forEach(resposta => { %>
+    <div class="card" id="form-criar-resposta">
+      <div class="card-body"><%- resposta.corpoMarkdown %></div>
+    </div>
+    <br>
+    <% }) %>
   </div>
 </body>
 <%- include('partials/footer.ejs') %>
