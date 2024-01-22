@@ -2,10 +2,6 @@
 <body>
   <%- include('partials/navbar.ejs') %>
   <div class="container">
-    <hr>
-    <h1>Perguntas: <a href="/perguntar" class="btn btn-primary">Perguntar</a></h1>
-    <hr>
-    <% perguntas.forEach(pergunta => { %>
     <div class="card" id="form-pergunta">
       <div class="card-header" id="card-header-pergunta">
         <h4><%= pergunta.titulo %></h4>
@@ -18,11 +14,10 @@
         <p>Pergunta fechada</p>
         <% } %>
         <p>Criado em <%= pergunta.createdAt %></p>
-        <a href="/pergunta/<%= pergunta.id %>"><button class="btn btn-primary">Responder</button></a>
+        <button class="btn btn-primary">Responder</button>
       </div>
     </div>
     <br />
-    <% }) %>
   </div>
-  <%- include('partials/footer.ejs') %>
 </body>
+<%- include('partials/footer.ejs') %>
