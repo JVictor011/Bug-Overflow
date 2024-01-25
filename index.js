@@ -3,11 +3,16 @@ const app = express();
 const connection = require("./database/database");
 const Pergunta = require("./database/pergunta");
 const Resposta = require("./database/resposta");
+const User = require("./database/user");
 const markdownIt = require("markdown-it");
 const md = new markdownIt();
-const { Sequelize, Op } = require('sequelize');
+const { Sequelize, Op } = require("sequelize");
+const session = require("express-session");
+const passport = require("passport");
+const authRoutes = require("./auth");
+const crypto = require("crypto");
+const secretkey = crypto.randomBytes(64).toString("hex");
 
-//Database
 connection
   .authenticate()
   .then(() => {
@@ -24,7 +29,16 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Função para processar Markdown
+app.use(
+  session({
+    secret: secretkey,
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 function processarMarkdown(pergunta) {
   return {
     ...pergunta,
@@ -39,8 +53,7 @@ function processarMarkdownResposta(resposta) {
   };
 }
 
-// Rota para exibir todas as perguntas
-app.get("/", async (req, res) => {
+app.get("/home", async (req, res) => {
   try {
     const perguntas = await Pergunta.findAll({
       raw: true,
@@ -63,12 +76,22 @@ app.get("/perguntar", (req, res) => {
 app.post("/salvarpergunta", async (req, res) => {
   try {
     const { titulo, descricao } = req.body;
-    await Pergunta.create({
-      titulo,
-      descricao,
-      status: true,
-    });
-    res.redirect("/");
+
+    if (req.isAuthenticated()) {
+      const username = req.user.username;
+
+      await Pergunta.create({
+        titulo,
+        descricao,
+        status: true,
+        username: username,
+      });
+
+      res.redirect("/home");
+    } else {
+      console.log("Usuário não autenticado");
+      res.redirect("/");
+    }
   } catch (error) {
     console.error("Erro ao salvar pergunta:", error);
     res.status(500).send("Erro interno no servidor");
@@ -93,7 +116,7 @@ app.get("/pergunta/:id", async (req, res) => {
         respostas: respostaMarkdown,
       });
     } else {
-      res.redirect("/");
+      res.redirect("/home");
     }
   } catch (error) {
     console.error("Erro ao obter pergunta por ID:", error);
@@ -104,17 +127,23 @@ app.get("/pergunta/:id", async (req, res) => {
 app.post("/salvarResposta", async (req, res) => {
   try {
     const { corpoResposta, idResposta } = req.body;
-    console.log(corpoResposta);
-    console.log(idResposta);
 
-    await Resposta.create({
-      corpo: corpoResposta,
-      perguntaId: idResposta,
-      username: "userTest",
-    });
-    res.redirect("/pergunta/" + idResposta);
+    if (req.isAuthenticated()) {
+      const username = req.user.username;
+
+      await Resposta.create({
+        corpo: corpoResposta,
+        perguntaId: idResposta,
+        username: username,
+      });
+
+      res.redirect("/pergunta/" + idResposta);
+    } else {
+      console.log("Usuário não autenticado");
+      res.redirect("/login");
+    }
   } catch (error) {
-    console.error("Erro ao obter pergunta por ID:", error);
+    console.error("Erro ao salvar resposta:", error);
     res.status(500).send("Erro interno no servidor");
   }
 });
@@ -140,7 +169,34 @@ app.post("/buscar", async (req, res) => {
   }
 });
 
-// Iniciar o servidor
+app.get(
+  "/auth/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+app.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  function (req, res) {
+    res.redirect("/home");
+  }
+);
+
+app.get("/auth/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
+});
+
+app.get("/", (req, res) => {
+  if (req.isAuthenticated()) {
+    
+    res.redirect("/home");
+  } else {
+    
+    res.render("login.ejs", { user: req.user });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}!`);
 });

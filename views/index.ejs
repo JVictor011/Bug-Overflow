@@ -2,9 +2,11 @@
 <body>
   <%- include('partials/navbar.ejs') %>
   <div class="container">
-    <hr>
-    <h1>Perguntas: <a href="/perguntar" class="btn btn-primary">Perguntar</a></h1>
-    <hr>
+    <hr />
+    <h1>
+      Perguntas: <a href="/perguntar" class="btn btn-primary">Perguntar</a>
+    </h1>
+    <hr />
     <% perguntas.forEach(pergunta => { %>
     <div class="card" id="form-pergunta">
       <div class="card-header" id="card-header-pergunta">
@@ -12,13 +14,19 @@
       </div>
       <div class="card-body"><%- pergunta.descricaoMarkdown %></div>
       <div class="card-footer">
-        <% if(pergunta.status == true){ %>
+        <% if(pergunta.username){ %>
+        <p><strong><%= pergunta.username %></strong></p>
+        <% }else{ %>
+        <p><strong>Anônimo</strong></p>
+        <% } %> <% if(pergunta.status == true){ %>
         <p>Pergunta aberta</p>
         <% }else{ %>
         <p>Pergunta fechada</p>
         <% } %>
         <p>Criado em <%= pergunta.createdAt %></p>
-        <a href="/pergunta/<%= pergunta.id %>"><button class="btn btn-primary">Responder</button></a>
+        <a href="/pergunta/<%= pergunta.id %>"
+          ><button class="btn btn-primary">Responder</button></a
+        >
       </div>
     </div>
     <br />

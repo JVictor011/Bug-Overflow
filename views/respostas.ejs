@@ -38,9 +38,15 @@
     <br />
     <% respostas.forEach(resposta => { %>
     <div class="card" id="form-criar-resposta">
-      <div class="card-body"><%- resposta.corpoMarkdown %></div>
+      <div class="card-body">
+        <% if(resposta.username){ %>
+        <p><strong><%- resposta.username %></strong></p>
+        <% }else{ %>
+        <p><strong>Anônimo</strong></p>
+        <% } %> <%- resposta.corpoMarkdown %>
+      </div>
     </div>
-    <br>
+    <br />
     <% }) %>
   </div>
 </body>
