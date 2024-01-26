@@ -39,6 +39,7 @@ O projeto utiliza o Passport e o GitHub OAuth para autenticação social. Crie u
 ```javascript
 GITHUB_CLIENT_ID = sua_client_id;
 GITHUB_CLIENT_SECRET = sua_client_secret;
+GITHUB_CALLBACK_URL=http://localhost:5000/auth/github/callback
 ```
 
 ### 4. Inicialização do Projeto
