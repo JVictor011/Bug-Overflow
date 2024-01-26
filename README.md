@@ -36,11 +36,9 @@ module.exports = connection;
 
 O projeto utiliza o Passport e o GitHub OAuth para autenticação social. Crie um aplicativo no [GitHub Developer Settings](https://github.com/settings/developers) para obter as credenciais de cliente (client ID e client secret). Em seguida, crie um arquivo '.env' na raiz do projeto e adicione suas credenciais:
 
-[GitHub Developer Settings](https://github.com/settings/developers)
-
 ```javascript
-GITHUB_CLIENT_ID=sua_client_id
-GITHUB_CLIENT_SECRET=sua_client_secret
+GITHUB_CLIENT_ID = sua_client_id;
+GITHUB_CLIENT_SECRET = sua_client_secret;
 ```
 
 ### 4. Inicialização do Projeto
@@ -68,3 +66,7 @@ O servidor será iniciado em http://localhost:5000.
 ### 6. Autenticação
 
 O projeto utiliza a autenticação do GitHub. Os usuários podem autenticar-se clicando no botão "Entrar com o Github".
+
+### Documetação
+
+[GitHub Developer Settings](https://github.com/settings/developers)
