@@ -1,0 +1,19 @@
+body{
+    background-color: #B5B5B5;
+}
+
+#form-pergunta{
+    margin-top: 5vh;
+}
+
+#card-header-pergunta{
+    background-color: #00686C;
+    color: white;
+}
+
+.btn{
+    background-color: #0B9CA1;
+    border-color: #0B9CA1;
+    font-family: "DM sans", sans-serif;
+    color: aliceblue;
+}

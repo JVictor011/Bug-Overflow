@@ -1,0 +1,53 @@
+<%- include('partials/header.ejs') %>
+<body>
+  <%- include('partials/navbar.ejs') %>
+  <div class="container">
+    <div class="card" id="form-pergunta">
+      <div class="card-header" id="card-header-pergunta">
+        <h4><%= pergunta.titulo %></h4>
+      </div>
+      <div class="card-body"><%- pergunta.descricaoMarkdown %></div>
+      <div class="card-footer">
+        <% if(pergunta.status == true){ %>
+        <p>Pergunta aberta</p>
+        <% }else{ %>
+        <p>Pergunta fechada</p>
+        <% } %>
+        <p>Criado em <%= pergunta.createdAt %></p>
+        <hr />
+      </div>
+    </div>
+    <br />
+    <div class="card" id="form-criar-resposta">
+      <div class="card-header" id="card-header-pergunta">
+        <h6>Resposta</h6>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="/salvarResposta">
+          <textarea
+            placeholder="Digite sua resposta"
+            class="form-control"
+            name="corpoResposta"
+          ></textarea>
+          <input type="hidden" value="<%= pergunta.id %>" name="idResposta" />
+          <br />
+          <button class="btn btn-primary">Responder</button>
+        </form>
+      </div>
+    </div>
+    <br />
+    <% respostas.forEach(resposta => { %>
+    <div class="card" id="form-criar-resposta">
+      <div class="card-body">
+        <% if(resposta.username){ %>
+        <p><strong><%- resposta.username %></strong></p>
+        <% }else{ %>
+        <p><strong>Anônimo</strong></p>
+        <% } %> <%- resposta.corpoMarkdown %>
+      </div>
+    </div>
+    <br />
+    <% }) %>
+  </div>
+</body>
+<%- include('partials/footer.ejs') %>
