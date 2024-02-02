@@ -9,9 +9,10 @@ const md = new markdownIt();
 const { Sequelize, Op } = require("sequelize");
 const session = require("express-session");
 const passport = require("passport");
-const authRoutes = require("./auth");
+const authRoutes = require("./back-end/OAuth/auth");
 const crypto = require("crypto");
 const secretkey = crypto.randomBytes(64).toString("hex");
+require("./back-end/OAuth/googleOAuth");
 
 connection
   .authenticate()
@@ -182,17 +183,43 @@ app.get(
   }
 );
 
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    res.redirect("/home");
+  }
+);
+
 app.get("/auth/logout", (req, res) => {
-  req.logout();
-  res.redirect("/");
+  try {
+    if (req.isAuthenticated()) {
+      req.logout(function (err) {
+        if (err) {
+          console.error(err);
+          return res.status(500).send("Erro interno no servidor");
+        }
+        res.redirect("/");
+      });
+    } else {
+      console.log("Usuário não autenticado");
+      res.redirect("/");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro interno no servidor");
+  }
 });
 
 app.get("/", (req, res) => {
   if (req.isAuthenticated()) {
-    
     res.redirect("/home");
   } else {
-    
     res.render("login.ejs", { user: req.user });
   }
 });
