@@ -1,6 +1,6 @@
 const passport = require("passport");
-const GitHubStrategy = require("passport-github").Strategy;
-const User = require("../../database/user");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const User = require("../database/models/user");
 require("dotenv").config();
 
 passport.serializeUser((user, done) => {
@@ -12,11 +12,11 @@ passport.deserializeUser((obj, done) => {
 });
 
 passport.use(
-  new GitHubStrategy(
+  new GoogleStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -24,7 +24,7 @@ passport.use(
           where: { githubId: profile.id },
           defaults: {
             githubId: profile.id,
-            username: profile.username,
+            username: profile.displayName,
           },
         });
 

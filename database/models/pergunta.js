@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const connection = require("./database");
+const connection = require("../database");
 
 const Pergunta = connection.define("perguntas", {
   titulo: {
@@ -13,9 +13,9 @@ const Pergunta = connection.define("perguntas", {
   username: {
     type: Sequelize.STRING,
   },
-  status:{
+  status: {
     type: Sequelize.BOOLEAN,
-  }
+  },
 });
 
 Pergunta.sync({ force: false }).then(() => {
