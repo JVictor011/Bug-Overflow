@@ -21,9 +21,9 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const [user, created] = await User.findOrCreate({
-          where: { githubId: profile.id },
+          where: { OAuthId: profile.id },
           defaults: {
-            githubId: profile.id,
+            OAuthId: profile.id,
             username: profile.username,
           },
         });
