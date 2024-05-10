@@ -1,6 +1,5 @@
 const express = require("express");
 const { Sequelize, Op } = require("sequelize");
-const session = require("express-session");
 const passport = require("passport");
 const authRoutes = require("../OAuth/githubOAuth");
 const User = require("../database/models/user");

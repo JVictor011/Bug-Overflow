@@ -13,7 +13,7 @@ const User = connection.define("user", {
     unique: true,
   },
   password: {
-    type: Sequelize,
+    type: Sequelize.STRING,
     allowNull: true,
     set(password) {
       if (password) {
